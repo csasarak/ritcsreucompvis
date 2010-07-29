@@ -1,12 +1,10 @@
 import javax.media.jai.*;
-//import com.sun.media.jai.*;
+import javax.imageio.ImageIO;
 import java.awt.image.renderable.ParameterBlock;
-import java.awt.Transparency;
 import java.awt.color.ColorSpace;
-import java.awt.image.ColorModel;
-import java.awt.image.ComponentColorModel;
-import java.awt.image.DataBuffer;
 import java.lang.String;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * This class can convert a colored image to grayscale. 
@@ -25,11 +23,22 @@ public class ConvertToMono{
             System.out.println("Need a file to convert to grayscale");
             System.exit(1);
         }
-        String inputFile = args[0]; 
-        String outputFile = inputFile.substring(0, inputFile.lastIndexOf('.')) + "GR.tif";
-        PlanarImage inputImg = JAI.create("fileload", inputFile);
+        String inputFilename = args[0]; 
+        String outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "GR.jpg";
+        PlanarImage inputImg = JAI.create("fileload", inputFilename);
+
+        /**
+         * For writing you cannot use JAI with the openJDK for reasons shown on
+         * this web page: http://codingexplorer.wordpress.com/2009/07/12/interface-was-expected-for-jpegimageencoder/
+         * So use ImageIO instead.
+         */
         PlanarImage outputImg = makeGrayScale(inputImg);
-        JAI.create("filestore", outputImg, outputFile, "TIFF");
+        try{
+            ImageIO.write(outputImg, "jpg", new File(outputFilename));
+        }catch(IOException e){
+            System.out.println("Error writing " + outputFilename + ": " 
+                                + e.getMessage());
+        }
     }
 
     /**

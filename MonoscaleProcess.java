@@ -6,7 +6,7 @@
 import javax.media.jai.*;
 import java.awt.image.RenderedImage;
 
-public class Monoscaler implements ImageProcess {
+public class MonoscaleProcess implements ImageProcess {
     /**
      * This method accepts a RenderedImage and converts it to 
      * binary.

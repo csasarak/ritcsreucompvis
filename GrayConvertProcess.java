@@ -7,7 +7,7 @@ import java.awt.image.RenderedImage;
  *
  * @author Christopher Sasarak
  */
-public class GrayConverter implements ImageProcess{
+public class GrayConvertProcess implements ImageProcess{
     /**
      * This method will make an image GrayScale.
      *

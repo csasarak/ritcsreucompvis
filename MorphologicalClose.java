@@ -25,7 +25,7 @@ public class MorphologicalClose{
             System.exit(1);
         }
         String inputFilename = args[0]; 
-        String outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "OP.jpg";
+        String outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "CL.jpg";
         PlanarImage inputImg = JAI.create("fileload", inputFilename);
         
         PlanarImage outputImg = morphClose(inputImg);
@@ -47,12 +47,15 @@ public class MorphologicalClose{
      * @return PlanarImage The image after
      */
      public static PlanarImage morphClose(PlanarImage img){
-         float disk[] ={1,1,1,1,1,        
-                       1,1,1,1,1, 
-                       1,1,1,1,1,
-                       1,1,1,1,1,
-                      1,1,1,1,1}; 
-        KernelJAI kern = new KernelJAI(5,5,disk); 
+         float disk[] ={0,     0,    1,    1,    1,    0,    0,
+                       0,    1,    1,    1,    1,    1,    0,
+                       1,    1,    1,    1,    1,    1,    1,
+                       1,    1,    1,    1,    1,    1,    1,
+                       1,    1,    1,    1,    1,    1,    1,
+                       0,    1,    1,    1,    1,    1,    0,
+                       0,    0,   1,    1,    1,    0,    0};
+
+        KernelJAI kern = new KernelJAI(7,7,disk); 
         PlanarImage erode = JAI.create("dilate", img, kern, null);
         return JAI.create("erode",img, kern, null);
      }

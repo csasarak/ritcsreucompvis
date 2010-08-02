@@ -3,6 +3,13 @@
  *
  * @author Christopher Sasarak
  */
+import javax.media.jai.*;
+import javax.imageio.ImageIO;
+import java.awt.image.renderable.ParameterBlock;
+import java.awt.color.ColorSpace;
+import java.lang.String;
+import java.io.File;
+import java.io.IOException;
 
 /**
  * @class Performs a morphological open operation; this is an erode followed by a dilation.
@@ -18,10 +25,10 @@ public class MorphologicalOpen{
             System.exit(1);
         }
         String inputFilename = args[0]; 
-        String outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "BW.jpg";
+        String outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "OP.jpg";
         PlanarImage inputImg = JAI.create("fileload", inputFilename);
-
-        PlanarImage outputImg = //To do 
+        
+        PlanarImage outputImg = morphOpen(inputImg);
 
         try{
             ImageIO.write(outputImg, "jpg", new File(outputFilename));
@@ -39,4 +46,19 @@ public class MorphologicalOpen{
      * @param img The image to convert perform a morphological open operation on 
      * @return PlanarImage The image after
      */
+     public static PlanarImage morphOpen(PlanarImage img){
+         float disk[] = {0,    0,     1,     1,    1,    1,   1,    0,    0,
+                           0,   1,    1,    1,    1,   1,    1,     1,     0,
+                           1,    1,     1,    1,    1,    1,    1,    1,    1,
+                           1,    1,    1,    1,    1,    1,    1,     1,     1,
+                           1,    1,    1,    1,    1,    1,    1,    1,    1,
+                           1,    1,    1,    1,    1,    1,    1,    1,    1,
+                           1,    1,    1,    1,    1,    1,    1,    1,    1,
+                           0,    1,    1,    1,    1,    1,    1,    1,    0,
+                           0,    0,    1,    1,    1,    1,    1,    0,    0};
+       
+        KernelJAI kern = new KernelJAI(9,9,disk); 
+        PlanarImage erode = JAI.create("erode", img, kern, null);
+        return JAI.create("dilate",img, kern, null);
+     }
 }

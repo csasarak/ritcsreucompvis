@@ -11,7 +11,7 @@ import java.io.IOException;
  *
  * @author Christopher Sasarak
  */
-public class ConvertToMono{
+public class ConvertToGray{
     
     /**
      * Main method will read in a filename from its arguments and then

@@ -47,12 +47,15 @@ public class MorphologicalClose{
      * @return PlanarImage The image after
      */
      public static PlanarImage morphClose(PlanarImage img){
-         float disk[] ={1,1,1,1,1,        
-                       1,1,1,1,1, 
-                       1,1,1,1,1,
-                       1,1,1,1,1,
-                      1,1,1,1,1}; 
-        KernelJAI kern = new KernelJAI(5,5,disk); 
+         float disk[] ={0,     0,    1,    1,    1,    0,    0,
+                       0,    1,    1,    1,    1,    1,    0,
+                       1,    1,    1,    1,    1,    1,    1,
+                       1,    1,    1,    1,    1,    1,    1,
+                       1,    1,    1,    1,    1,    1,    1,
+                       0,    1,    1,    1,    1,    1,    0,
+                       0,    0,   1,    1,    1,    0,    0};
+
+        KernelJAI kern = new KernelJAI(7,7,disk); 
         PlanarImage erode = JAI.create("dilate", img, kern, null);
         return JAI.create("erode",img, kern, null);
      }

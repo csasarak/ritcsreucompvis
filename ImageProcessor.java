@@ -4,7 +4,7 @@ import java.awt.image.RenderedImage;
 import javax.imageio.ImageIO;
 import javax.media.jai.JAI;
 
-public class ProcessorTest{
+public class ImageProcessor{
 
     /**
      *

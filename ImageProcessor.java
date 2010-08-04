@@ -18,9 +18,10 @@ public class ImageProcessor{
         
         //Build up the processor
         ProcessList processor = new ProcessList();
+        processor.add(new MorphologicalCloseProcess()); 
         processor.add(new GrayConvertProcess());
         processor.add(new MonoscaleProcess());
-        processor.add(new MorphologicalCloseProcess()); 
+        //processor.add(new CannyEdgeDetector());
           
         for(int n = 0; n < args.length; n++){
             String inputFilename = args[n]; 

@@ -25,11 +25,10 @@ public class ProcessorTest{
         for(int n = 0; n < args.length; n++){
             String inputFilename = args[n]; 
             String outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "PR.jpg";
-            RenderedImage inputImg = JAI.create("fileload", inputFilename);
-            
-            RenderedImage outputImg = processor.process(inputImg);
 
             try{
+                RenderedImage inputImg = ImageIO.read(new File(inputFilename));
+                RenderedImage outputImg = processor.process(inputImg);
                 ImageIO.write(outputImg, "jpg", new File(outputFilename));
             }catch(IOException e){
                 System.out.println("Error writing " + outputFilename + ": " 

@@ -18,6 +18,11 @@ public class MonoscaleProcess implements ImageProcess {
         Histogram hist = (Histogram)JAI.create("histogram", img).getProperty("histogram");
         double[] threshold = hist.getMaxVarianceThreshold();
 
-        return JAI.create("binarize", img, new Double(threshold[0]));
+        try{
+            return JAI.create("binarize", img, new Double(threshold[0]));
+        }catch(IllegalArgumentException e){
+            System.err.println("Cannot binarize image: " + e.getMessage());
+            return img;
+        }
     }
 }

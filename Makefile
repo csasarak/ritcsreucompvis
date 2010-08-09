@@ -27,5 +27,8 @@ MorphologicalCloseProcess.class:
 SobelDetectionProcess.class: 
 	$(CC) SobelDetectionProcess.java
 
+HoughTransformer.class:
+	$(CC) HoughTransformer.java 
+
 clean:
 	rm *.class

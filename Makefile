@@ -3,7 +3,7 @@ CC=javac
 
 all: ImageProcessor.class
 
-ImageProcessor.class: ImageProcess.class GrayConvertProcess.class InvertProcess.class MonoscaleProcess.class MorphologicalCloseProcess.class SobelDetectionProcess.class
+ImageProcessor.class: ImageProcess.class GrayConvertProcess.class MonoscaleProcess.class MorphologicalCloseProcess.class SobelDetectionProcess.class
 	$(CC) ImageProcessor.java
 
 ProcessList.class: ImageProces.class
@@ -14,9 +14,6 @@ ImageProcess.class:
 
 GrayConvertProcess.class: 
 	$(CC) GrayConvertProcess.java
-
-InvertProcess.class: 
-	$(CC) InvertProcess.java
 
 MonoscaleProcess.class: 
 	$(CC) MonoscaleProcess.java

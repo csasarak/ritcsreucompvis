@@ -1,30 +1,30 @@
 #CC=javac -cp $HOME/jai-1_1_3/lib/:$HOME/ImageJ/:.
 CC=javac
 
-all: ImageProcessor
+all: ImageProcessor.class
 
-ImageProcessor: ImageProcess GrayConvertProcess InvertProcess MonoscaleProcess MorphologicalCloseProcess SobelDetectionProcess
+ImageProcessor.class: ImageProcess.class GrayConvertProcess.class InvertProcess.class MonoscaleProcess.class MorphologicalCloseProcess.class SobelDetectionProcess.class
 	$(CC) ImageProcessor.java
 
-ProcessList: ImageProcess
+ProcessList.class: ImageProces.class
 	$(CC) ProcessList.java
 
-ImageProcess: 
+ImageProcess.class: 
 	$(CC) ImageProcess.java
 
-GrayConvertProcess: 
+GrayConvertProcess.class: 
 	$(CC) GrayConvertProcess.java
 
-InvertProcess: 
+InvertProcess.class: 
 	$(CC) InvertProcess.java
 
-MonoscaleProcess: 
+MonoscaleProcess.class: 
 	$(CC) MonoscaleProcess.java
 
-MorphologicalCloseProcess: 
+MorphologicalCloseProcess.class: 
 	$(CC) MorphologicalCloseProcess.java
 
-SobelDetectionProcess: 
+SobelDetectionProcess.class: 
 	$(CC) SobelDetectionProcess.java
 
 clean:

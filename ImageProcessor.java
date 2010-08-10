@@ -26,24 +26,20 @@ public class ImageProcessor{
 
         //the third parameter is a placeholder until I can try something
         //different
-        HoughTransformer trans = new HoughTransformer(100, .70, 100.0);
+        HoughTransformer trans = new HoughTransformer(200, .70, 100.0);
 
         for(int n = 0; n < args.length; n++){
             String inputFilename = args[n]; 
             String outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "PR.jpg";
-            RenderedImage inputImg = null;
+            RenderedImage inputImg;
 
             try{
                 inputImg = ImageIO.read(new File(inputFilename));
             }catch(IOException e){
-                System.out.println("Error writing " + outputFilename + ": " 
+                System.err.println("Error reading " + outputFilename + ": " 
                                     + e.getMessage());
+                continue;
             }  
-            
-            if(inputImg == null){
-                System.out.println("Could not read: " + inputFilename);
-                System.exit(1);
-            }
             
             RenderedImage outputImg = processor.process(inputImg);
             Category cat = trans.process(outputImg);

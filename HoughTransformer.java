@@ -54,18 +54,20 @@ public class HoughTransformer{
         I'm referring to this site: http://homepages.inf.ed.ac.uk/rbf/HIPR2/hough.htm
         for this. */
         HoughTransform hough = new HoughTransform(img.getWidth(), 
-            img.getHeight(), .70);
+            img.getHeight(), houghTolerance);
 
         LocatedCircle circle = hough.getLargestCircle(imgData, 
             img.getWidth(), img.getHeight());
-        
+       
+       //REMOVE THESE AFTER TESTING 
         System.out.println(circle.getRadius());
         System.out.println("Location: ("+circle.getX() +"," +circle.getY()+")");
         System.out.println("Confidence: " + circle.getConfidence());
-        /**
+
+        /*
          * Check that the circle we're looking for is near the center.
          * If it is not, then the hough transform probably found
-         * a larger object than the one in question and failed.
+         * a different object than the one in question and failed.
          */
         double circX = circle.getX(), circY = circle.getY();
         double confidence = circle.getConfidence();
@@ -84,18 +86,4 @@ public class HoughTransformer{
             return Category.ELLIPTICAL;
     }
     
-
-    public static void main(String args[]){
-        if(args.length < 1)
-            System.exit(1);
-
-        //The last parameter is a placeholder for now
-        HoughTransformer trans = new HoughTransformer(100, .70, 100.0);
-
-        try{
-            trans.process(ImageIO.read(new File(args[0])));
-        }catch(IOException e){
-            System.out.println(e.getMessage());
-        }
-    }
 }

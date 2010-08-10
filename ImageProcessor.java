@@ -21,20 +21,42 @@ public class ImageProcessor{
         processor.add(new MorphologicalCloseProcess()); 
         processor.add(new GrayConvertProcess());
         processor.add(new MonoscaleProcess());
-        processor.add(new SobelDetectionProcess());
-          
+        SobelDetectionProcess sobel = new SobelDetectionProcess();
+        processor.add(sobel);
+
+        //the third parameter is a placeholder until I can try something
+        //different
+        HoughTransformer trans = new HoughTransformer(100, .70, 100.0);
+
         for(int n = 0; n < args.length; n++){
             String inputFilename = args[n]; 
             String outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "PR.jpg";
+            RenderedImage inputImg = null;
 
             try{
-                RenderedImage inputImg = ImageIO.read(new File(inputFilename));
-                RenderedImage outputImg = processor.process(inputImg);
-                ImageIO.write(outputImg, "jpg", new File(outputFilename));
+                inputImg = ImageIO.read(new File(inputFilename));
             }catch(IOException e){
                 System.out.println("Error writing " + outputFilename + ": " 
                                     + e.getMessage());
+            }  
+            
+            if(inputImg == null){
+                System.out.println("Could not read: " + inputFilename);
+                System.exit(1);
             }
+            
+            RenderedImage outputImg = processor.process(inputImg);
+            Category cat = trans.process(outputImg);
+
+            //if undefined, try processing again, without the Sobel operator
+            if(cat == Category.UNDEFINED){
+                processor.remove(sobel);
+                outputImg = processor.process(inputImg);
+                cat = trans.process(outputImg);
+                processor.add(sobel);
+            }
+            
+            System.out.println("Input file " + inputFilename + ": " + cat);
         }
     }
 }

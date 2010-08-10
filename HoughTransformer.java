@@ -19,7 +19,8 @@ public class HoughTransformer{
     
     int centerTolerance; 
     double houghTolerance;
-    
+    double houghConfidence;    
+
     /**
      * The first constructor for HoughTransformer which
      * will set the tolerance for the center of the circle.
@@ -59,7 +60,7 @@ public class HoughTransformer{
             img.getWidth(), img.getHeight());
         
         System.out.println(circle.getRadius());
-        System.out.println("Location: ("+circle.getX() +"," +circle.getY());
+        System.out.println("Location: ("+circle.getX() +"," +circle.getY()+")");
         System.out.println("Confidence: " + circle.getConfidence());
         /**
          * Check that the circle we're looking for is near the center.
@@ -67,11 +68,20 @@ public class HoughTransformer{
          * a larger object than the one in question and failed.
          */
         double circX = circle.getX(), circY = circle.getY();
+        double confidence = circle.getConfidence();
         if((circX < width-centerTolerance || circX > width+centerTolerance)
             || (circY < height-centerTolerance || circY>height+centerTolerance))
             return Category.UNDEFINED;
-        
-        return Category.UNDEFINED;
+       
+        else if(confidence == 0)
+            return Category.UNDEFINED; 
+
+        //Now based on the confidence, place the circle in a category.
+        //If the confidence is higher, then the galaxy was more circular. 
+        if(confidence < houghConfidence)
+           return Category.SPIRAL;
+        else
+            return Category.ELLIPTICAL;
     }
     
 

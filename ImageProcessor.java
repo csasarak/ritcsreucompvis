@@ -5,6 +5,8 @@ import javax.imageio.ImageIO;
 import javax.media.jai.JAI;
 
 public class ImageProcessor{
+    
+    ProcessList process;
 
     /**
      *
@@ -16,43 +18,47 @@ public class ImageProcessor{
             System.exit(1);
         }
         
-        //Build up the processor
-        ProcessList processor = new ProcessList();
-        processor.add(new MorphologicalCloseProcess()); 
-        processor.add(new GrayConvertProcess());
-        processor.add(new MonoscaleProcess());
-        SobelDetectionProcess sobel = new SobelDetectionProcess();
-        processor.add(sobel);
-
-        //the third parameter is a placeholder until I can try something
-        //different
-        HoughTransformer trans = new HoughTransformer(200, .70, 100.0);
+        ImageProcessor process = new ImageProcessor();  
+         
 
         for(int n = 0; n < args.length; n++){
-            String inputFilename = args[n]; 
-            String outputFilename = inputFilename.substring(0, inputFilename.lastIndexOf('.')) + "PR.jpg";
-            RenderedImage inputImg;
-
             try{
-                inputImg = ImageIO.read(new File(inputFilename));
+                process.categorizeImage(args[n]);
             }catch(IOException e){
-                System.err.println("Error reading " + outputFilename + ": " 
+                System.err.println("Error reading " + args[n] + ": " 
                                     + e.getMessage());
-                continue;
             }  
-            
-            RenderedImage outputImg = processor.process(inputImg);
-            Category cat = trans.process(outputImg);
-
-            //if undefined, try processing again, without the Sobel operator
-            if(cat == Category.UNDEFINED){
-                processor.remove(sobel);
-                outputImg = processor.process(inputImg);
-                cat = trans.process(outputImg);
-                processor.add(sobel);
-            }
-            
-            System.out.println("Input file " + inputFilename + ": " + cat);
         }
+    }
+    
+    public ImageProcessor(){
+        //build up the image process
+        process = new ProcessList();
+        process.add(new MorphologicalCloseProcess()); 
+        process.add(new GrayConvertProcess());
+        process.add(new MonoscaleProcess());
+        SobelDetectionProcess sobel = new SobelDetectionProcess();
+        process.add(sobel);
+    }
+
+    public Category categorizeImage(String filename)
+        throws IOException{
+
+        RenderedImage inputImg = ImageIO.read(new File(filename));
+        
+        HoughTransformer trans = new HoughTransformer(250, .70, 100.0);
+        RenderedImage outputImg = process.process(inputImg);
+        Category cat = trans.process(outputImg);
+
+        //if undefined, try processing again, without the Sobel operator
+        if(cat == Category.UNDEFINED){
+            ImageProcess sobel = process.get(process.size() - 1);
+            process.remove(process.size() - 1);
+            cat = trans.process(process.process(inputImg));
+            process.add(sobel);
+        }
+        
+        System.out.println("Input file " + filename + ": " + cat);
+        return cat;
     }
 }

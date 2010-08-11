@@ -1,0 +1,13 @@
+In order to run the code in this repository you need to have two libraries in your path:
+JAI – which can be found at this location:
+
+https://jai.dev.java.net/
+
+And Bij (which requires ImageJ, but this is included in one of the archives) – which can be found at this location:
+
+http://big.isi.uu.nl/
+
+To run the program on an image simply run “java ImageProcessor ” supplying that image’s filename at the command line. A list of images can also be given and the classifications will be printed out to stdout.
+
+Project supported by the National Science Foundation under Award No. CCF-0851743
+
